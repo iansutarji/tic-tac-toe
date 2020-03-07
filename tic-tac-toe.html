@@ -87,6 +87,7 @@
           cells[i].addEventListener("click", turnClick, false);
         }
       }
+
       function turnClick(square) {
         if (typeof origBoard[square.target.id] == "number") {
           turn(square.target.id, huPlayer);
@@ -152,7 +153,7 @@
         return false;
       }
 
-      function miniMax(newBoard, player) {
+      function minimax(newBoard, player) {
         var availSpots = emptySquares(newBoard);
 
         if (checkWin(newBoard, player)) {
