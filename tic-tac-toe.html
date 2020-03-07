@@ -51,8 +51,6 @@
         top: 200px;
         background-color: rgba(205, 133, 63, 0.8);
         position: absolute;
-        left: 28%;
-        margin-left: -100px;
         padding-top: 120px;
         padding-bottom: 100px;
         text-align: center;
@@ -91,17 +89,34 @@
       function turnClick(square) {
         if (typeof origBoard[square.target.id] == "number") {
           turn(square.target.id, huPlayer);
-          //ini turn jg mmg ada atau dia buat sendiri?
+          // Q: ini turn jg mmg ada atau dia buat sendiri?
+          // A: Di bagian ini, dia pertama bakal cek apakah game nya
+          //    sudah tie, dan kalau tidak, dia akan jalanin satu
+          //    turn sebagai AI nya menggunakan tempat terbaik
+          //    yang didapatkan dari fungsi bestSpot()
           if (!checkTie()) turn(bestSpot(), aiPlayer);
         }
       }
 
       function turn(squareId, player) {
-        //Id nya kenapa bisa muncul? knp bkn square.id?
+        // Q: Id nya kenapa bisa muncul? knp bkn square.id?
+        // A: squareId itu dapat dari parameter function
+        //
+        //        function turn(squareId, player)
+        //
+        //    square.id itu input ke dalam function nya,
+        //    e.g. di turnClick(), dia input nya square.target.id
+        //    untuk input user, dan bestSpot() untuk input AI.
+        //    kedua-duanya bakal jadi squareId pas di dalam function ini.
+
         origBoard[squareId] = player;
         document.getElementById(squareId).innerText = player;
         let gameWon = checkWin(origBoard, player);
-        //kalo ku pke checkWon sama aja? atau kalo ku pke gameWin dan checkWon gimana?
+        // Q: kalo ku pke checkWon sama aja? atau kalo ku pke gameWin dan checkWon gimana?
+        // A: ???
+        //    checkWin itu function untuk memeriksa apakah `player` menang game nya.
+        //    Hasil return dari function itu masuk ke variable gameWon, dan dari situ bisa
+        //    di cek dengan if (gameWon), maka value nya akan dimasukkan ke dalam function gameOver
         if (gameWon) gameOver(gameWon);
       }
 
@@ -128,7 +143,15 @@
           cells[i].removeEventListener("click", turnClick, false);
         }
         declareWinner(gameWon.player == huPlayer ? "You win" : "You lose");
-        //? mksudnya apa
+        // Q: ? mksudnya apa
+        // A: Fungsi declareWinner akan memunculkan box yang ada tulisannya
+        //    "You win" atau "You lose", fungsi gameOver ini akan mengambil
+        //    variable gameWon dan mengecek, apakah property `player` dari
+        //    gameWon itu sama dengan player kita. Kalau yang menang adalah
+        //    player kita (O), maka message yang ditampilkan adalah "You win".
+        //    Sebaliknya, kalau yang menang adalah X, maka gameWon.player akan
+        //    memiliki value "X", sedangkan huPlayer adalah "O", maka pesan
+        //    yang ditampilkan adalah "You lose"
       }
       function declareWinner(who) {
         document.querySelector(".endgame").style.display = "block";
